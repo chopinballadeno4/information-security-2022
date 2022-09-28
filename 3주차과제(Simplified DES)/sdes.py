@@ -118,7 +118,6 @@ mode determines that this function do encryption or decryption.
 def sdes(text: bitarray, key: bitarray, mode) -> bitarray:
     result = bitarray()
     schedule_ok_keys = schedule_keys(key)
-    print("schedule_ok_keys = " + str(schedule_ok_keys))
     k1 = schedule_ok_keys[0]
     k2 = schedule_ok_keys[1]
 
@@ -126,18 +125,15 @@ def sdes(text: bitarray, key: bitarray, mode) -> bitarray:
 
     for i in IP:
         ip_ok_text.append(text[i])
-    print("ip_ok_text = " + str(ip_ok_text))
 
     #━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
     if mode == 1: # encrypts
         round1_text = round(ip_ok_text[4:], k1)
         round1_ok_text = ip_ok_text[4:] + (round1_text ^ ip_ok_text[0:4])
-        print("round1_ok_text = " + str(round1_ok_text))
 
         round2_text = round(round1_ok_text[4:], k2)
         round2_ok_text = (round2_text ^ round1_ok_text[0:4]) + round1_ok_text[4:]
-        print("round2_ok_text = " + str(round2_ok_text))
 
         for i in IP_1:
             result.append(round2_ok_text[i])
@@ -145,11 +141,9 @@ def sdes(text: bitarray, key: bitarray, mode) -> bitarray:
     else: # decrypts
         round1_text = round(ip_ok_text[4:], k2)
         round1_ok_text = ip_ok_text[4:] + (round1_text ^ ip_ok_text[0:4])
-        print("round1_ok_text = " + str(round1_ok_text))
 
         round2_text = round(round1_ok_text[4:], k1)
         round2_ok_text = (round2_text ^ round1_ok_text[0:4]) + round1_ok_text[4:]
-        print("round2_ok_text = " + str(round2_ok_text))
 
         for i in IP_1:
             result.append(round2_ok_text[i])
