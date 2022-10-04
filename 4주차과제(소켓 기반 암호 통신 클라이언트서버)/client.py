@@ -26,7 +26,7 @@ class Receiver(Thread):
         cipher = AES.new(key, AES.MODE_ECB)
         plaintext = cipher.decrypt(ciphertext)
 
-        return plaintext
+        return unpad(plaintext, BLOCK_SIZE)
 
     def handle_recv(self, received: bytes):
         try:
